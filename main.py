@@ -1,6 +1,7 @@
 # this allows us to use code from
 # the open-source pygame library
 # throughout this file
+import sys
 import pygame
 
 from asteroid import Asteroid
@@ -31,6 +32,14 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
+        for object in updatable_group:
+            object.update(dt)
+
+        for asteroid in asteroid_group:
+            if asteroid.collides_with(player):
+                print("Game over!")
+                sys.exit()
+
         screen.fill(COLOR_BLACK)
 
         for object in drawable_group:
@@ -38,9 +47,7 @@ def main():
 
         pygame.display.flip()
 
-        for object in updatable_group:
-            object.update(dt)
-
+        # limit the framerate to 60 FPS
         dt = clock.tick(60) / 1000
 
 
